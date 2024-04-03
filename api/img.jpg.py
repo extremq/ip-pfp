@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 from PIL import Image, ImageFont, ImageDraw
+from io import BytesIO
 
 
 def make_image_from_text(text):
@@ -16,14 +17,19 @@ def make_image_from_text(text):
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        ip = self.headers.get("x-forwarded-for")
+        image = make_image_from_text("Got your ip bro:\n" + ip)
+        img_file = BytesIO()
+        image.save(img_file, 'jpeg')
+
         self.send_response(200)
         self.send_header("Content-type", "image/jpeg")
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.send_header("Pragma", "no-cache")
         self.send_header("Expires", "0")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Length", str(img_file.tell()))
         self.end_headers()
-
-        ip = self.headers.get("x-forwarded-for")
-        image = make_image_from_text("Got your ip bro:\n" + ip)
 
         image.save(self.wfile, "JPEG")
