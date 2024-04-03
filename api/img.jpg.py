@@ -30,7 +30,6 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("Expires", "0")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Accept-Ranges", "bytes")
-        print(str(img_file.tell()))
         self.end_headers()
 
         image.save(self.wfile, "JPEG")
