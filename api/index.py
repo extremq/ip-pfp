@@ -24,6 +24,6 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
 
         ip = self.headers.get("x-forwarded-for")
-        image = make_image_from_text("Got your ip bro: " + ip)
+        image = make_image_from_text("Got your ip bro:\n" + ip)
 
         image.save(self.wfile, "JPEG")
