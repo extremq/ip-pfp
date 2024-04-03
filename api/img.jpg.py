@@ -24,12 +24,12 @@ class handler(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.send_header("Content-type", "image/jpeg")
+        self.send_header("Content-length", str(img_file.tell()))
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.send_header("Pragma", "no-cache")
         self.send_header("Expires", "0")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Accept-Ranges", "bytes")
-        self.send_header("Content-Length", str(img_file.tell()))
         print(str(img_file.tell()))
         self.end_headers()
 
