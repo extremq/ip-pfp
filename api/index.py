@@ -1,20 +1,16 @@
 from http.server import BaseHTTPRequestHandler
-from PIL import Image, ImageFont
+from PIL import Image, ImageFont, ImageDraw
 
 
 def make_image_from_text(text):
     font_size = 72
     font_filepath = "arial.ttf"
-    color = (255, 255, 255)
+    arial = ImageFont.truetype(font_filepath, font_size)
 
-    font = ImageFont.truetype(font_filepath, size=font_size)
-    mask_image = font.getmask(text, "L")
-    img = Image.new("RGB", mask_image.size)
-    img.im.paste(
-        color,
-        (0, 0) + mask_image.size,
-        mask_image
-    )  # need to use the inner `img.im.paste` due to `getmask` returning a core
+    img = Image.new("RGB", (600, 200))
+    drawable = ImageDraw.Draw(img)
+    drawable.text((20, 20), text, font=arial, fill=(255, 255, 255))
+
     return img
 
 
